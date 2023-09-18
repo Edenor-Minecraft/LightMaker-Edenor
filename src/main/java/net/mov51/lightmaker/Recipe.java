@@ -55,6 +55,47 @@ public class Recipe {
         Bukkit.addRecipe(recipe);
     }
 
+    public static void addEdenorRecipe(Plugin plugin){
+        plugin.getLogger().log(Level.INFO,"Adding Light Block bottling recipe!");
+        //the name/key of the group used for collecting the recipes in the recipe book.
+        String bottlingGroup = "light_block_bottling";
+        //loops through each item in the 'lights_to_bottle' section and creates a recipe with the defined quantity in a group.
+        for(String ingredient : Objects.requireNonNull(plugin.getConfig().getConfigurationSection("light_ingredients_to_bottle")).getKeys(false)){
+            //if the quantity for the current entry is zero or doesn't exist, use the default quantity.
+            int q = plugin.getConfig().getInt("light_ingredients_to_bottle." + ingredient + ".quantity") != 0 ?
+                    plugin.getConfig().getInt("light_ingredients_to_bottle." + ingredient + ".quantity") :
+                    plugin.getConfig().getInt("default_light_quantity");
+            //create a new unique key with the ingredient name.
+            NamespacedKey key = new NamespacedKey(plugin, "light_block_bottling_" + ingredient);
+            //add new key to recipe list for on player login unlocking
+            recipeList.add(key);
+            Material itemToBottle;
+
+            try {
+                //try to convert the name provided to a material. https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+                itemToBottle = Material.valueOf(ingredient.toUpperCase());
+            }catch (IllegalArgumentException e){
+                //if it can't be converted, notify and skip to the next entry
+                plugin.getLogger().log(Level.SEVERE,ingredient + " does not exist and the light block recipe can not be created!");
+                continue;
+            }
+            //create a shapeless recipe with the defined quantity as the output quantity.
+            ShapelessRecipe bottleRecipe = new ShapelessRecipe(key,
+                    lights.get(15).asQuantity(q));
+
+            //add a glass bottle to the recipe
+            bottleRecipe.addIngredient(Material.GLASS_BOTTLE);
+            //add the provided entry as an ingredient
+            bottleRecipe.addIngredient(itemToBottle);
+            //Adding this recipe to bottlingGroup that collects in the crafting book.
+            bottleRecipe.setGroup(bottlingGroup);
+            //add the recipe to the server
+            Bukkit.addRecipe(bottleRecipe);
+            plugin.getLogger().log(Level.INFO,ingredient + " can now be bottled!");
+        }
+        plugin.getLogger().log(Level.INFO,"Light Block bottling recipes have been added!");
+    }
+
     public static void addBottlingRecipe(Plugin plugin){
         plugin.getLogger().log(Level.INFO,"Adding Light Block bottling recipe!");
         //the name/key of the group used for collecting the recipes in the recipe book.

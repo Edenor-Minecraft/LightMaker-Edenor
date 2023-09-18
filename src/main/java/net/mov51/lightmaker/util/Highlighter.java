@@ -1,6 +1,8 @@
 package net.mov51.lightmaker.util;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.mov51.lightmaker.LightMaker;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -15,7 +17,7 @@ public class Highlighter {
 
     protected LightMaker plugin;
     private Map<UUID, ParticleRender> particleMapper = new HashMap<>();
-    private BukkitTask projectorTask;
+    private ScheduledTask projectorTask;
 
     public Highlighter(LightMaker plugin) {
         this.plugin = plugin;
@@ -28,14 +30,11 @@ public class Highlighter {
             projectorTask = null;
         }
         int updateRate = 1;
-        projectorTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (ParticleRender visual : particleMapper.values()) {
-                    visual.update();
-                }
+        projectorTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, v -> {
+            for (ParticleRender visual : particleMapper.values()) {
+                visual.update();
             }
-        }.runTaskTimer(plugin, updateRate, watchPeriod);
+        }, updateRate, watchPeriod);
     }
 
     public void add(Player player) {

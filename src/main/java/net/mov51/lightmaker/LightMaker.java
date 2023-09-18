@@ -19,10 +19,14 @@ public final class LightMaker extends JavaPlugin {
 
     public static List<NamespacedKey> recipeList = new ArrayList<>();
 
-    public static int watchPeriod;
+    public static int watchPeriod = 1;
+
+    public static LightMaker plugin = null;
 
     @Override
     public void onEnable() {
+        plugin = this;
+
         getServer().getPluginManager().registerEvents(new PlayerInteraction(), this);
         getServer().getPluginManager().registerEvents(new BlockReplacement(), this);
         getServer().getPluginManager().registerEvents(new BlockPlacement(), this);

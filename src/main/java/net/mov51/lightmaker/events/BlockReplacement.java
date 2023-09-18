@@ -1,5 +1,7 @@
 package net.mov51.lightmaker.events;
 
+import net.mov51.lightmaker.LightMaker;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.Light;
 import org.bukkit.event.EventHandler;
@@ -15,7 +17,9 @@ public class BlockReplacement implements Listener {
     public void BlockPlaceEvent(BlockPlaceEvent e) {
         if(e.getPlayer().getGameMode() == org.bukkit.GameMode.CREATIVE){return;}
         if(e.getBlockReplacedState().getType() == Material.LIGHT){
-           e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), makeLight(((Light) e.getBlockReplacedState().getBlockData()).getLevel()));
+            Bukkit.getRegionScheduler().run(LightMaker.plugin, e.getBlock().getLocation(), val -> {
+                e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), makeLight(((Light) e.getBlockReplacedState().getBlockData()).getLevel()));
+            });
         }
     }
 }

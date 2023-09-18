@@ -16,18 +16,17 @@ public class HandWatcher {
 
 
     public static void startWatching(Plugin plugin){
-
-        new BukkitRunnable() {
-            public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
+        Bukkit.getServer().getGlobalRegionScheduler().runAtFixedRate(plugin, val -> {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                Bukkit.getServer().getRegionScheduler().run(plugin, p.getLocation(), v -> {
                     if(isLight(p.getInventory().getItemInMainHand()) || isLight(p.getInventory().getItemInOffHand())){
                         projector.add(p);
                     }else{
                         projector.remove(p);
                     }
-                }
+                });
             }
-        }.runTaskTimer(plugin, 0L, watchPeriod);
+        }, 1L, watchPeriod);
     }
 }
 
