@@ -3,8 +3,8 @@ default_light_quantity: 16
 stop-entity-spawns-at-0: true
 #how often (in ticks) the plugin should summon new light particles for players holding light blocks
 watch-period-in-ticks: 10
-#'shapeless' or 'bottled-light' are the valid options
-recipe_type: bottled-light
+#'shapeless', 'bottled-light' or 'edenor' are the valid options
+recipe_type: edenor
 #Should the plugin give the recipes to every player when they log in?
 grant_recipes_on_login: true
 #A maximum of 9 ingredients for the 9 crafting slots
