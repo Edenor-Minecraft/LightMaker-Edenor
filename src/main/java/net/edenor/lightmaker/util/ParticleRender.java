@@ -1,6 +1,6 @@
-package net.mov51.lightmaker.util;
+package net.edenor.lightmaker.util;
 
-import net.mov51.lightmaker.LightMaker;
+import net.edenor.lightmaker.LightMaker;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
