@@ -1,12 +1,13 @@
-package net.mov51.lightmaker.events;
+package net.edenor.lightmaker.events;
 
-import net.mov51.lightmaker.LightMaker;
+import net.edenor.lightmaker.LightMaker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Item;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,17 +15,16 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static net.mov51.lightmaker.util.Lights.*;
+import static net.edenor.lightmaker.util.Lights.*;
 
 public class PlayerInteraction implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void PlayerInteractEvent(PlayerInteractEvent e) {
-
+        if (e.useInteractedBlock() == Event.Result.DENY){ return;}
         if (e.getItem() != null && e.getClickedBlock() != null && isLight(e.getItem())) {
             //get Block
             Block b = e.getClickedBlock();
@@ -35,12 +35,16 @@ public class PlayerInteraction implements Listener {
                     int l = ((Levelled) b.getBlockData()).getLevel();
                     //break
                     if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                        b.breakNaturally();
-                        List<Item> items = new ArrayList<>();
-                        items.add(b.getWorld().dropItemNaturally(b.getLocation(), lights.get(l)));
-                        if(!(new BlockDropItemEvent(b, b.getState(), e.getPlayer(), items).callEvent())){
-                            for(Item i : items){
-                                i.remove();
+                        BlockBreakEvent be = new BlockBreakEvent(b, e.getPlayer());
+                        be.callEvent();
+                        if(!be.isCancelled()){
+                            b.breakNaturally();
+                            List<Item> items = new ArrayList<>();
+                            items.add(b.getWorld().dropItemNaturally(b.getLocation(), lights.get(l)));
+                            if(!(new BlockDropItemEvent(b, b.getState(), e.getPlayer(), items).callEvent())){
+                                for(Item i : items){
+                                    i.remove();
+                                }
                             }
                         }
 
