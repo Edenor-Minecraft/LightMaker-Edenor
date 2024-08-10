@@ -1,6 +1,6 @@
 name: LightMaker-Folia
 version: ${project.version}
-main: net.mov51.lightmaker.LightMaker
+main: net.edenor.lightmaker.LightMaker
 api-version: 1.20
-authors: [ mov51, altronmaxx ]
+authors: [ altronmaxx ]
 folia-supported: true

@@ -1,8 +1,8 @@
-package net.mov51.lightmaker;
+package net.edenor.lightmaker;
 
-import net.mov51.lightmaker.events.*;
-import net.mov51.lightmaker.util.Lights;
-import net.mov51.lightmaker.util.Highlighter;
+import net.edenor.lightmaker.events.*;
+import net.edenor.lightmaker.util.Lights;
+import net.edenor.lightmaker.util.Highlighter;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import static net.mov51.lightmaker.Recipe.*;
-import static net.mov51.lightmaker.util.HandWatcher.startWatching;
+import static net.edenor.lightmaker.Recipe.*;
+import static net.edenor.lightmaker.util.HandWatcher.startWatching;
 
 public final class LightMaker extends JavaPlugin {
 
@@ -35,7 +35,16 @@ public final class LightMaker extends JavaPlugin {
 
         this.saveDefaultConfig();
         //If setting is true, register player log-in event.
-        if(this.getConfig().getBoolean("grant_recipes_on_login")){getServer().getPluginManager().registerEvents(new PlayerLogin(), this);}
+        if (this.getConfig().getBoolean("grant_recipes_on_login")) {
+            getServer().getPluginManager().registerEvents(new PlayerLogin(), this);
+        }
+        //allows for the creation of custom recipes by disabling the default base ones entirely
+        if(this.getConfig().getBoolean("enable_base_recipes")) {
+            addRecipes(this);
+        }
+        if(this.getConfig().getBoolean("enable_level_recipes")){
+            addLevelRecipe(this);
+        }
         if(this.getConfig().getBoolean("stop-entity-spawns-at-0")){getServer().getPluginManager().registerEvents(new CreatureSpawnEventListener(), this);}
         watchPeriod = this.getConfig().getInt("watch-period-in-ticks") != 0 ? this.getConfig().getInt("watch-period-in-ticks") : 10;
         startWatching(this);
