@@ -45,11 +45,12 @@ public final class LightMaker extends JavaPlugin {
         if(this.getConfig().getBoolean("enable_level_recipes")){
             addLevelRecipe(this);
         }
+        if (this.getConfig().getBoolean("enable_edenor_recipes")){
+            addEdenorRecipe(this);
+        }
         if(this.getConfig().getBoolean("stop-entity-spawns-at-0")){getServer().getPluginManager().registerEvents(new CreatureSpawnEventListener(), this);}
         watchPeriod = this.getConfig().getInt("watch-period-in-ticks") != 0 ? this.getConfig().getInt("watch-period-in-ticks") : 10;
         startWatching(this);
-        addRecipes(this);
-        addLevelRecipe(this);
 
         this.getLogger().log(Level.INFO,"Lights can now be MADE by *your* hands!");
     }
