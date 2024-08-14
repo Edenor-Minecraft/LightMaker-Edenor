@@ -11,8 +11,8 @@ import java.util.UUID;
 public class ParticleRender {
 
     private final UUID PLAYER_UUID;
-    private Highlighter highlight;
-    private Player player;
+    private final Highlighter highlight;
+    private final Player player;
 
     public ParticleRender(Highlighter projector, UUID uuid) {
         this.highlight = projector;

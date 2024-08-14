@@ -6,8 +6,8 @@ watch-period-in-ticks: 10
 enable_base_recipes: true
 #should the plugin register recipes for the different levels of light block in the stonecutter??
 enable_level_recipes: true
-#'shapeless', 'bottled-light' or 'edenor' are the valid options
-recipe_type: edenor
+#'shapeless', 'bottled-light' are the valid options
+recipe_type: bottled-light
 #Should the plugin give the recipes to every player when they log in?
 grant_recipes_on_login: true
 #The default number of light blocks to give when crafting
